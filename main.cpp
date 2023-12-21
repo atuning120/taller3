@@ -36,6 +36,10 @@ public:
 
     // Implementación del algoritmo de Bellman-Ford adaptado
     void bellmanFord(Nodo* nodoInicio, Nodo* nodoDestino, int tamArchivo) {
+        if(nodoInicio->id==nodoDestino->id){
+            cout<<nodoInicio->nombre<<"--(0s)-->"<<nodoInicio->nombre<<endl;
+            return;
+        }
         int n = nodos.size();
         vector<int> tiempoTotal(n, numeric_limits<int>::max());
         tiempoTotal[nodoInicio->id] = 0;
@@ -43,6 +47,7 @@ public:
         vector<int> tiempoDireccion;
         direccion.push_back(nodoInicio->nombre);
         bool Verificar=true;
+
         //Analizar el recorrido mas corto
         for (int i = 1; i < n; ++i) {
             for (Nodo* nodo : nodos) {
@@ -70,7 +75,6 @@ public:
                 }
             }
         }
-        
         // Verificar si hay ciclo negativo
         for (Nodo* nodo : nodos) {
             for (pair<Nodo*, pair<int, int>> conexion : nodo->conexiones) {
@@ -90,10 +94,13 @@ public:
         //direccion.push_back(nodoDestino->nombre);
         // Calcular el tiempo total
         int tiempoTransferencia = tiempoTotal[nodoDestino->id];
-
-        cout << "Tiempo total estimado para transferir un archivo de tamaño " << tamArchivo
+        if(tiempoTransferencia==numeric_limits<int>::max()){
+            cout<<"No se puede realizar la conexion"<<endl;
+            return;
+        }
+        cout << "Tiempo total estimado para transferir un archivo de tamano " << tamArchivo
              << " desde Nodo " << nodoInicio->id << " a Nodo " << nodoDestino->id
-             << ": " << tiempoTransferencia << " unidades de tiempo." << endl;
+             << ": " << tiempoTransferencia << "s." << endl;
 
         for(int i=0;i<direccion.size();i++){
             if(i==direccion.size()-1){
@@ -238,43 +245,74 @@ void imprimirConexiones(Grafo& grafo) {
         cout << endl;
     }
 }
+int menu(){
+    int respuesta;
+    cout<<"**********MENU************"<<endl;
+    cout<<"1. mostrar Nodos\n2. Mostrar conexiones\n3. Buscar camino mas corto\n4. salir"<<endl;
+    cout<<"Opcion: "<<endl;
+    cin>>respuesta;
+    while(respuesta<1 || respuesta>4){
+        cout<<"Respuesta invalida, ingrese una opcion valida...."<<endl;
+        cout<<"Opcion: "<<endl;
+        cin>>respuesta;
+    }
+    return respuesta;
+}
 //main
 int main() {
-    rellenar();
+    //rellenar();
 
     Grafo grafo;
     int idCliente, idDestinatario, tamArchivo;
 
     leerArchivoNodos("servidores.csv", grafo);
     leerArchivoConexiones("conexiones.csv", grafo);
-    imprimirConexiones(grafo);
+    int menuu= menu();
+    while(menuu!=4){
+        switch (menuu){
+        //Mostrar nodos
+        case 1:
+            for(int i=0;i<grafo.nodos.size();i++){
+                cout<<grafo.nodos[i]->id<<", "<<grafo.nodos[i]->nombre<<", "<<grafo.nodos[i]->tipo<<endl;
+            }
+            break;
+        //Mostrar conexiones
+        case 2:
+            imprimirConexiones(grafo);
+            break;
+        //Buscar camino mas corto
+        case 3:
+            cout<<"Ingrese el ID del cliente: ";  
+            cin>>idCliente;
 
-    cout<<"Ingrese el ID del cliente: ";  
-    cin>>idCliente;
+            while(grafo.nodos[idCliente]->tipo=="router" || idCliente<0 || idCliente >(grafo.nodos.size()-1)){
+                cout << "La ID debe existir y corresponder a un cliente"<<endl;
+                cout<<"Ingrese el ID del cliente: ";  
+                cin>>idCliente;
+            }
 
-    while(grafo.nodos[idCliente]->tipo=="router" || idCliente<0 || idCliente >(grafo.nodos.size()-1)){
-        cout << "La ID debe existir y corresponder a un cliente"<<endl;
-        cout<<"Ingrese el ID del cliente: ";  
-        cin>>idCliente;
+            cout << "Ingrese el ID del destinatario: ";
+            cin >> idDestinatario;
+
+            while(grafo.nodos[idDestinatario]->tipo=="router"|| idDestinatario<0 || idDestinatario >(grafo.nodos.size()-1)){
+                cout << "La ID debe existir y corresponder a un cliente"<<endl;
+                cout << "Ingrese el ID del destinatario: ";
+                cin >> idDestinatario;
+            }
+
+            cout << "Ingrese el tamano del archivo: ";
+            cin >> tamArchivo;
+            while(tamArchivo<=0){
+                cout<<"Ingresa un tamaño valido...."<<endl;
+                cout << "Ingrese el tamano del archivo: ";
+                cin >> tamArchivo;
+            }
+
+            // Llamar a Bellman-Ford con los nodos de inicio, destino y el tamaño del archivo
+            grafo.bellmanFord(grafo.nodos[idCliente], grafo.nodos[idDestinatario], tamArchivo);
+            break;
+        }
+        menuu= menu();
     }
-
-    cout << "Ingrese el ID del destinatario: ";
-    cin >> idDestinatario;
-
-    while(grafo.nodos[idDestinatario]->tipo=="router"|| idDestinatario<0 || idDestinatario >(grafo.nodos.size()-1)){
-        cout << "La ID debe existir y corresponder a un cliente"<<endl;
-        cout << "Ingrese el ID del destinatario: ";
-        cin >> idDestinatario;
-    }
-
-    cout << "Ingrese el tamaño del archivo: ";
-    cin >> tamArchivo;
-    while(tamArchivo<=0){
-        cout<<"Ingresa un tamaño valido...."<<endl;
-        cout << "Ingrese el tamaño del archivo: ";
-        cin >> tamArchivo;
-    }
-
-    // Llamar a Bellman-Ford con los nodos de inicio, destino y el tamaño del archivo
-    grafo.bellmanFord(grafo.nodos[idCliente], grafo.nodos[idDestinatario], tamArchivo);
+    cout<<"Fin del programa....";
 }
