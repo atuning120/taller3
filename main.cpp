@@ -240,7 +240,7 @@ void imprimirConexiones(Grafo& grafo) {
 }
 //main
 int main() {
-    //rellenar();
+    rellenar();
 
     Grafo grafo;
     int idCliente, idDestinatario, tamArchivo;
