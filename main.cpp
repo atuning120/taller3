@@ -1,5 +1,7 @@
 /*Nombres: Cristian Nuñez
            Eduardo Erice*/
+
+//Bibliotecas utilizadas
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,19 +13,20 @@
 using namespace std;
 //Clase Grafo
 class Grafo {
-
 public:
+    //vector de Nodos
     vector<Nodo*> nodos;
-
+    //crear un nodo o vértice en el grafo
     void agregarNodo(int id,string nombre,string tipo) {
         Nodo* nuevo= new Nodo(id,nombre,tipo);
         nodos.push_back(nuevo);
     }
-
+    //Crear una conexion o ariste en el grafo
     void agregarConexion(Nodo* nodoCliente, Nodo* nodoServidor, int velocidad, int distancia) {
         pair<Nodo*, pair<int, int>> nuevo= make_pair(nodoServidor,make_pair(velocidad,distancia));
         nodoCliente->conexiones.push_back(nuevo);
     }
+    //calcular el tiempo segun la velocidad, distancia y peso del archivo
     int calcularTiempoTransferencia(int tamArchivo, int velocidad, int distancia) {
         // Calcular el tiempo de transferencia (archivo dividido por velocidad multiplicado por distancia)
         while((tamArchivo%velocidad!=0)){
@@ -40,6 +43,7 @@ public:
             cout<<nodoInicio->nombre<<"--(0s)-->"<<nodoInicio->nombre<<endl;
             return;
         }
+        //variables importantes para el analisis 
         int n = nodos.size();
         vector<int> tiempoTotal(n, numeric_limits<int>::max());
         tiempoTotal[nodoInicio->id] = 0;
@@ -91,17 +95,19 @@ public:
                 }
             }
         }
-        //direccion.push_back(nodoDestino->nombre);
         // Calcular el tiempo total
         int tiempoTransferencia = tiempoTotal[nodoDestino->id];
+        //En el caso de que no se pudo acceder al receptor
         if(tiempoTransferencia==numeric_limits<int>::max()){
             cout<<"No se puede realizar la conexion"<<endl;
             return;
         }
+        //En el caso de que sis se puedo acceder al receptor
         cout << "Tiempo total estimado para transferir un archivo de tamano " << tamArchivo
              << " desde Nodo " << nodoInicio->id << " a Nodo " << nodoDestino->id
              << ": " << tiempoTransferencia << "s." << endl;
 
+        //Mostrar trayectoria
         for(int i=0;i<direccion.size();i++){
             if(i==direccion.size()-1){
                 cout<<direccion[i]<<endl;
@@ -245,6 +251,7 @@ void imprimirConexiones(Grafo& grafo) {
         cout << endl;
     }
 }
+//Menu
 int menu(){
     int respuesta;
     cout<<"**********MENU************"<<endl;
@@ -260,13 +267,20 @@ int menu(){
 }
 //main
 int main() {
+    //modificar los archivos csv
     rellenar();
 
+    //crear el grafo
     Grafo grafo;
+
+    //definir variables importantes
     int idCliente, idDestinatario, tamArchivo;
 
+    //leer los archivos 
     leerArchivoNodos("servidores.csv", grafo);
     leerArchivoConexiones("conexiones.csv", grafo);
+
+    //Menu de opciones
     int menuu= menu();
     while(menuu!=4){
         switch (menuu){
@@ -282,6 +296,7 @@ int main() {
             break;
         //Buscar camino mas corto
         case 3:
+            //pedir id de emision
             cout<<"Ingrese el ID del cliente: ";  
             cin>>idCliente;
 
@@ -290,7 +305,7 @@ int main() {
                 cout<<"Ingrese el ID del cliente: ";  
                 cin>>idCliente;
             }
-
+            //pedir id de recepcion
             cout << "Ingrese el ID del destinatario: ";
             cin >> idDestinatario;
 
@@ -299,7 +314,7 @@ int main() {
                 cout << "Ingrese el ID del destinatario: ";
                 cin >> idDestinatario;
             }
-
+            //pedir tamaño del archivo
             cout << "Ingrese el tamano del archivo: ";
             cin >> tamArchivo;
             while(tamArchivo<=0){
@@ -314,5 +329,6 @@ int main() {
         }
         menuu= menu();
     }
+    //fin
     cout<<"Fin del programa....";
 }
