@@ -8,7 +8,8 @@ Este taller se realizó en Visual Studio Code en C++ (los siguientes comandos se
 + para compilar el main: **g++ -o main main.cpp**  
 + para ejecutar el codigo: **./main.exe**  
 
-El código se raelizó a base de 2 clases; Nodo y Grafo, donde el Nodo posee como atributos id, nombre, tipo y un vector con las conexiones (pair<Nodo*,pair<velocidad,distancia>>), El Grafo posee solo un vector de Nodos o vertices del Grafo.    
+El código se raelizó a base de 2 clases; Nodo y Grafo, donde el Nodo posee como atributos id, nombre, tipo y un vector con las conexiones (pair<Nodo*,pair<velocidad,distancia>>), El Grafo posee solo un vector de Nodos o vertices del Grafo.   
+**Importante: por temas de errores, la clase Grafo se implementó dentro del archivo main, y la clase Nodo se hizo en un archivo aparte.**   
 Al iniciar el programa, se presenta un menú con las siguientes opciones:
 1.  Mostrar Nodos
 2.  Mostrar conexiones
