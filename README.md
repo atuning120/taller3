@@ -4,7 +4,7 @@
 + Edurado Erices
 + Cristian Nuñez
 
-Este taller se realizó en Visual Studio Code en C++(los siguientes comandos se ingresan por consola)...  
+Este taller se realizó en Visual Studio Code en C++ (los siguientes comandos se ingresan por consola)...  
 + para compilar el main: **g++ -o main main.cpp**  
 + para ejecutar el codigo: **./main.exe**  
 
