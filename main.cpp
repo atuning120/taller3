@@ -260,7 +260,7 @@ int menu(){
 }
 //main
 int main() {
-    //rellenar();
+    rellenar();
 
     Grafo grafo;
     int idCliente, idDestinatario, tamArchivo;
