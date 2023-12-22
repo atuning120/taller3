@@ -12,8 +12,8 @@ El código se raelizó a base de 2 clases; Nodo y Grafo, donde el Nodo posee com
 Al iniciar el programa, se presenta un menú con las siguientes opciones:
 1.  Mostrar Nodos
 2.  Mostrar conexiones
-3.  buscar camino mas corto
-4.  salir  
+3.  Buscar camino mas corto
+4.  Salir  
 
 Cada opción tiene las siguientes funciones:  
 1.  Mostrar los atributos de cada nodo o vértices del grafo
