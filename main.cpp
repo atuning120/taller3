@@ -1,5 +1,5 @@
-/*Nombres: Cristian Nuñez (21.387.541-8)
-           Eduardo Erices(21.600.760-3)¨*/
+/*Nombres: Cristian Nuñez
+           Eduardo Erice*/
 #include <iostream>
 #include <string>
 #include <vector>
